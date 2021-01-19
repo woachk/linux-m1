@@ -179,6 +179,7 @@ properties:
       - enum:
           - psci
           - spin-table
+          - apple
       # On ARM 32-bit systems this property is optional
       - enum:
           - actions,s500-smp
