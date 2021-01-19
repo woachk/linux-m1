@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/interrupt-controller/apple,aic.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Apple Advanced Interrupt Controller (AIC)
+
+description:
+  Interrupt controller present on Apple processors. AIC
+  is used by Apple on their AArch64 SoCs since the Apple A7.
+
+maintainers:
+  - Stan Skowronek <stan@corellium.com>
+
+properties:
+  compatible:
+    items:
+      - const: apple,aic
+
+  reg:
+    maxItems: 1
+
+  '#interrupt-cells':
+    const: 3
+
+  interrupt-controller: true
+
+  fast-ipi:
+    description:
+      Fast IPI support.
+
+required:
+  - compatible
+  - '#interrupt-cells'
+  - interrupt-controller
+  - reg
+
+additionalProperties: false
+
+examples:
+  - |
+        aic: interrupt-controller@23b100000 {
+             compatible = "apple,aic";
+             #interrupt-cells = <3>;
+             interrupt-controller;
+             reg = <0x2 0x3b100000 0x0 0x8000>;
+             fast-ipi;
+         };
