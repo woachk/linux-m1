@@ -85,6 +85,7 @@ properties:
 
   compatible:
     enum:
+      - apple,icestorm
       - arm,arm710t
       - arm,arm720t
       - arm,arm740t
