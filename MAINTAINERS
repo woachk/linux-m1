@@ -1218,6 +1218,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor
 F:	Documentation/admin-guide/LSM/apparmor.rst
 F:	security/apparmor/
 
+APPLE INTERRUPT CONTROLLER DRIVER
+M:	Stan Skowronek <stan@corellium.com>
+L:	linux-arm-kernel@lists.infradead.org
+S:	Maintained
+F:	drivers/irqchip/irq-apple-aic.c
+
 APPLE BCM5974 MULTITOUCH DRIVER
 M:	Henrik Rydberg <rydberg@bitmath.org>
 L:	linux-input@vger.kernel.org
