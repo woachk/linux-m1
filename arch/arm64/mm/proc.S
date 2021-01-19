@@ -51,6 +51,25 @@
 #define TCR_KASAN_HW_FLAGS 0
 #endif
 
+#ifdef CONFIG_ARCH_APPLE
+
+/*
+ * Apple cores appear to black-hole writes done with nGnRE.
+ * We settled on a work-around that uses MAIR vs changing every single user of
+ * nGnRE across the arm64 code.
+ */
+
+#define MAIR_EL1_SET_APPLE						\
+	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
+	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRE) |	\
+	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_GRE, MT_DEVICE_GRE) |		\
+	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_NC, MT_NORMAL_NC) |		\
+	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL) |			\
+	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_WT, MT_NORMAL_WT) |		\
+	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL_TAGGED))
+
+#endif
+
 /*
  * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory and
  * changed during __cpu_setup to Normal Tagged if the system supports MTE.
@@ -432,6 +451,13 @@ SYM_FUNC_START(__cpu_setup)
 	 * Memory region attributes
 	 */
 	mov_q	x5, MAIR_EL1_SET
+#ifdef CONFIG_ARCH_APPLE
+	mrs	x0, MIDR_EL1
+	lsr	w0, w0, #24
+	mov_q	x1, MAIR_EL1_SET_APPLE
+	cmp	x0, #0x61			// 0x61 = Implementer: Apple
+	csel	x5, x1, x5, eq
+#endif
 #ifdef CONFIG_ARM64_MTE
 	mte_tcr	.req	x20
 
