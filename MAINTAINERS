@@ -1236,6 +1236,12 @@ L:	linux-hwmon@vger.kernel.org
 S:	Odd fixes
 F:	drivers/hwmon/applesmc.c
 
+APPLE UART DRIVER
+M:	Stan Skowronek <stan@corellium.com>
+L:	linux-serial@vger.kernel.org
+S:	Maintained
+F:	drivers/tty/serial/apple-uart.c
+
 APPLETALK NETWORK LAYER
 L:	netdev@vger.kernel.org
 S:	Odd fixes

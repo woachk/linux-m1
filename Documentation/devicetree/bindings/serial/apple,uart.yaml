@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: GPL-2.0
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/serial/apple,uart.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Apple serial UART
+
+maintainers:
+  - Stan Skowronek <stan@corellium.com>
+
+allOf:
+  - $ref: /schemas/serial.yaml#
+
+select:
+  properties:
+    compatible:
+      contains:
+        enum:
+          - apple,uart
+  required:
+    - compatible
+
+properties:
+  compatible:
+      - items:
+        - enum:
+              - apple,uart
+
+  reg:
+    maxItems: 1
+
+  interrupts:
+    maxItems: 1
+
+  clocks:
+    maxItems: 1
+
+  clock-names:
+    items:
+      - const: refclk
+  index:
+    maxItems: 1
+
+required:
+  - compatible
+  - reg
+  - interrupts
+  - clocks
+  - clock-names
+  - index
+
+additionalProperties: false
+
+examples:
+  - |
+        uart0: serial@235200000 {
+             compatible = "apple,uart";
+             reg = <0x2 0x35200000 0x0 0x4000>;
+             interrupts = <0 605 4>;
+             clocks = <&refclk24mhz>;
+             clock-names = "refclk";
+             index = <0>;
+         };
+...
