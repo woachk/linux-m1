@@ -176,6 +176,7 @@ properties:
     oneOf:
       # On ARM v8 64-bit this property is required
       - enum:
+          - apple
           - psci
           - spin-table
       # On ARM 32-bit systems this property is optional
