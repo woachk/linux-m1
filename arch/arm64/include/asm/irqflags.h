@@ -19,8 +19,8 @@
  * side effects for other flags. Keeping to this order makes it easier for
  * entry.S to know which exceptions should be unmasked.
  *
- * FIQ is never expected, but we mask it when we disable debug exceptions, and
- * unmask it at all other times.
+ * FIQ is masked when we disable interrupts, and is unmasked at all
+ * other times.
  */
 
 /*
@@ -35,7 +35,7 @@ static inline void arch_local_irq_enable(void)
 	}
 
 	asm volatile(ALTERNATIVE(
-		"msr	daifclr, #2		// arch_local_irq_enable",
+		"msr	daifclr, #3		// arch_local_irq_enable",
 		__msr_s(SYS_ICC_PMR_EL1, "%0"),
 		ARM64_HAS_IRQ_PRIO_MASKING)
 		:
@@ -54,7 +54,7 @@ static inline void arch_local_irq_disable(void)
 	}
 
 	asm volatile(ALTERNATIVE(
-		"msr	daifset, #2		// arch_local_irq_disable",
+		"msr	daifset, #3		// arch_local_irq_disable",
 		__msr_s(SYS_ICC_PMR_EL1, "%0"),
 		ARM64_HAS_IRQ_PRIO_MASKING)
 		:
@@ -85,7 +85,7 @@ static inline int arch_irqs_disabled_flags(unsigned long flags)
 	int res;
 
 	asm volatile(ALTERNATIVE(
-		"and	%w0, %w1, #" __stringify(PSR_I_BIT),
+		"and	%w0, %w1, #" __stringify(PSR_I_BIT | PSR_F_BIT),
 		"eor	%w0, %w1, #" __stringify(GIC_PRIO_IRQON),
 		ARM64_HAS_IRQ_PRIO_MASKING)
 		: "=&r" (res)
